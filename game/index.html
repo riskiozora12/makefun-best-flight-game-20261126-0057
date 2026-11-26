@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ridgeline Run — a bush-plane flight game</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./style.css">
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.min.js" } }
+</script>
+</head>
+<body>
+<div id="app"></div>
+
+<!-- In-flight HUD -->
+<div id="hud" style="display:none">
+  <div class="hud-top-left panel">
+    <div id="mission-name">Dawn Patrol</div>
+    <div class="hud-row"><span>RING</span><b id="ring-count">0/6</b><span id="ring-distance">—</span></div>
+    <div class="hud-row"><span>TIME</span><b id="timer">0:00</b></div>
+    <div id="objective">Fly through ring 1 of 6</div>
+  </div>
+  <div class="hud-top-center">
+    <canvas id="compass-canvas" width="320" height="40"></canvas>
+  </div>
+  <div class="hud-top-right panel">
+    <div class="hud-row"><span>SCORE</span><b id="score">0</b></div>
+    <div class="hud-row"><span>FUEL</span><span id="fuel-text">100%</span></div>
+    <div class="bar"><div id="fuel-fill" class="bar-fill fuel"></div></div>
+    <div class="hud-row"><span>DAMAGE</span></div>
+    <div class="bar"><div id="damage-fill" class="bar-fill damage"></div></div>
+  </div>
+  <div class="hud-bottom-left panel">
+    <div class="big-number"><span id="speed">0</span><small> KT</small></div>
+    <div class="hud-row"><span>THR</span></div>
+    <div class="bar"><div id="throttle-fill" class="bar-fill throttle"></div></div>
+    <div class="hud-row"><span id="gear-ind">GEAR DOWN</span><span id="flaps-ind"></span></div>
+  </div>
+  <div class="hud-bottom-center panel">
+    <canvas id="attitude-canvas" width="150" height="150"></canvas>
+    <div class="alt-block">
+      <div class="big-number"><span id="altitude">0</span><small> FT</small></div>
+      <div id="alt-agl">AGL 0 ft</div>
+      <div id="vspeed">+0 fpm</div>
+    </div>
+  </div>
+  <div id="ring-arrow"><div class="arrow-tri"></div></div>
+  <div id="message"></div>
+  <div id="warn-stall" class="warning">STALL</div>
+  <div id="warn-fuel" class="warning">LOW FUEL</div>
+  <div id="warn-gear" class="warning">GEAR UP — LOW</div>
+  <div id="cockpit-frame" style="display:none"></div>
+</div>
+
+<!-- Title / mission select -->
+<div id="menu">
+  <div class="menu-inner">
+    <h1>RIDGELINE RUN</h1>
+    <p class="tagline">A bush-plane game: thread the rings, mind your fuel, and bring her home on runway 36.</p>
+    <div id="mission-list"></div>
+    <div class="controls">
+      <div><b>↑ ↓</b> pitch &nbsp; <b>← →</b> bank &nbsp; <b>Shift / Ctrl</b> throttle</div>
+      <div><b>Mouse</b> hold to steer &nbsp; <b>Wheel</b> throttle &nbsp; <b>Space</b> flaps &nbsp; <b>G</b> gear</div>
+      <div><b>C</b> cockpit view &nbsp; <b>P</b> pause &nbsp; <b>M</b> sound &nbsp; <b>Enter</b> fly mission 1</div>
+    </div>
+    <p id="start-hint" class="hint">Click anywhere once to enable sound. Fly the rings in order, then land on the runway — gear down, wings level, gently.</p>
+  </div>
+</div>
+
+<!-- Mission debrief -->
+<div id="debrief" style="display:none">
+  <div class="panel-card">
+    <h2 id="debrief-title">Sortie complete</h2>
+    <div id="debrief-lines"></div>
+    <div class="debrief-total-row"><span>TOTAL SCORE</span><b id="debrief-total">0</b></div>
+    <div id="debrief-buttons"></div>
+  </div>
+</div>
+
+<!-- Crash -->
+<div id="crash-screen" style="display:none">
+  <div class="panel-card">
+    <h2>CRASHED</h2>
+    <p id="crash-reason"></p>
+    <div class="button-row">
+      <button id="crash-retry" class="big-button">Fly again</button>
+      <button id="crash-menu" class="big-button">Menu</button>
+    </div>
+  </div>
+</div>
+
+<!-- Pause -->
+<div id="pause-screen" style="display:none">
+  <div class="panel-card">
+    <h2>PAUSED</h2>
+    <div class="button-row">
+      <button id="pause-resume" class="big-button">Resume</button>
+      <button id="pause-menu" class="big-button">Menu</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>

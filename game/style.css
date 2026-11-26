@@ -1,0 +1,174 @@
+/* style.css — the lit-instrument look: dark glass panels, amber and cyan
+   readouts, glowing numbers. The HUD must stay readable when the
+   screenshots are shrunk, so the numbers are big and the panels are solid. */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #0a0f16;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  color: #eaf6ff;
+}
+
+#app, #app canvas {
+  position: fixed;
+  inset: 0;
+  display: block;
+}
+
+#hud { position: fixed; inset: 0; pointer-events: none; z-index: 5; }
+
+.panel {
+  background: rgba(8, 16, 26, 0.62);
+  border: 1px solid rgba(140, 220, 255, 0.35);
+  border-radius: 10px;
+  padding: 10px 14px;
+  backdrop-filter: blur(2px);
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.35), inset 0 0 24px rgba(60, 160, 255, 0.08);
+}
+
+.hud-top-left { position: absolute; top: 14px; left: 14px; min-width: 240px; }
+.hud-top-right { position: absolute; top: 14px; right: 14px; min-width: 220px; }
+.hud-top-center { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); }
+.hud-bottom-left { position: absolute; bottom: 14px; left: 14px; min-width: 200px; }
+.hud-bottom-center {
+  position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 14px;
+}
+
+#mission-name {
+  font-size: 20px; font-weight: 800; letter-spacing: 2px;
+  color: #ffb02e; text-transform: uppercase;
+}
+
+.hud-row {
+  display: flex; gap: 10px; align-items: baseline;
+  font-size: 13px; letter-spacing: 1px; color: #9fc6dd; margin-top: 3px;
+}
+.hud-row b { color: #ffffff; font-size: 15px; }
+.hud-row span.warn { color: #ff6a5e; font-weight: 700; }
+
+#objective { margin-top: 6px; font-size: 13px; color: #ffe9b0; }
+
+.big-number {
+  font-size: 40px; font-weight: 800; line-height: 1;
+  color: #ffffff; text-shadow: 0 0 12px rgba(120, 210, 255, 0.8);
+}
+.big-number small { font-size: 15px; color: #9fc6dd; }
+
+#alt-agl, #vspeed { font-size: 13px; color: #9fc6dd; margin-top: 2px; }
+
+.bar {
+  height: 8px; background: rgba(255, 255, 255, 0.14);
+  border-radius: 4px; margin-top: 4px; overflow: hidden;
+}
+.bar-fill { height: 100%; border-radius: 4px; transition: width 0.15s linear; }
+.bar-fill.fuel { background: linear-gradient(90deg, #2eff8a, #7dff9a); width: 100%; }
+.bar-fill.fuel.low { background: linear-gradient(90deg, #ff5a3c, #ff8c1a); }
+.bar-fill.damage { background: linear-gradient(90deg, #ff5a3c, #ff2a1a); width: 0%; }
+.bar-fill.throttle { background: linear-gradient(90deg, #ffb02e, #ffe9b0); width: 0%; }
+
+#attitude-canvas { border-radius: 50%; border: 2px solid rgba(140, 220, 255, 0.5); }
+
+#ring-arrow {
+  position: absolute; top: 50%; left: 50%;
+  width: 0; height: 0; display: none;
+}
+.arrow-tri {
+  width: 0; height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 22px solid rgba(46, 255, 138, 0.85);
+  transform: translate(-12px, -78px);
+  filter: drop-shadow(0 0 8px rgba(46, 255, 138, 0.8));
+}
+
+#message {
+  position: absolute; top: 22%; left: 50%; transform: translateX(-50%);
+  font-size: 26px; font-weight: 800; letter-spacing: 1px; text-align: center;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+  opacity: 0; transition: opacity 0.4s; white-space: nowrap;
+}
+
+.warning {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  font-size: 30px; font-weight: 900; letter-spacing: 4px; color: #ff3b2e;
+  text-shadow: 0 0 18px rgba(255, 60, 40, 0.9);
+  display: none; animation: blink 0.7s steps(2) infinite;
+}
+#warn-stall { top: 34%; }
+#warn-fuel { top: 42%; }
+#warn-gear { top: 42%; }
+@keyframes blink { 50% { opacity: 0.25; } }
+
+#cockpit-frame {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 26%;
+  background: linear-gradient(to top, rgba(20, 16, 12, 0.95) 0%, rgba(20, 16, 12, 0.75) 55%, rgba(20, 16, 12, 0) 100%);
+  pointer-events: none;
+}
+
+/* Screens: menu, debrief, crash, pause */
+#menu {
+  position: fixed; inset: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(180deg, rgba(10, 25, 45, 0.55), rgba(10, 15, 25, 0.88));
+}
+.menu-inner { max-width: 760px; padding: 24px; text-align: center; }
+.menu-inner h1 {
+  font-size: 64px; margin: 0; letter-spacing: 8px; font-weight: 900;
+  color: #ffb02e; text-shadow: 0 0 30px rgba(255, 176, 46, 0.55);
+}
+.tagline { font-size: 17px; color: #cfe8f7; margin: 6px 0 22px; }
+
+#mission-list { display: flex; flex-direction: column; gap: 10px; }
+.mission-card {
+  display: grid; grid-template-columns: 44px 1fr; gap: 4px 12px;
+  text-align: left; padding: 12px 16px; cursor: pointer;
+  background: rgba(12, 24, 38, 0.85); color: #eaf6ff;
+  border: 1px solid rgba(140, 220, 255, 0.4); border-radius: 12px;
+  transition: border-color 0.15s, background 0.15s;
+}
+.mission-card:hover { border-color: #ffb02e; background: rgba(30, 44, 62, 0.9); }
+.mission-num {
+  grid-row: span 3; font-size: 34px; font-weight: 900; color: #ffb02e;
+  display: flex; align-items: center; justify-content: center;
+}
+.mission-title { font-size: 19px; font-weight: 800; letter-spacing: 1px; }
+.mission-brief { font-size: 13.5px; color: #b9d6e8; }
+.mission-meta { font-size: 12.5px; color: #8fb8cf; letter-spacing: 0.5px; }
+
+.controls { margin-top: 20px; font-size: 14px; color: #b9d6e8; line-height: 1.7; }
+.controls b { color: #ffffff; background: rgba(255, 255, 255, 0.12); padding: 1px 7px; border-radius: 5px; }
+.hint { font-size: 13px; color: #8fb8cf; margin-top: 14px; }
+
+#debrief, #crash-screen, #pause-screen {
+  position: fixed; inset: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(6, 10, 18, 0.72);
+}
+.panel-card {
+  background: rgba(10, 20, 34, 0.94); border: 1px solid rgba(140, 220, 255, 0.45);
+  border-radius: 14px; padding: 28px 36px; min-width: 480px; max-width: 640px;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+}
+.panel-card h2 { margin: 0 0 12px; font-size: 30px; letter-spacing: 3px; color: #ffb02e; }
+.panel-card p { font-size: 15px; color: #cfe8f7; line-height: 1.5; }
+.debrief-row {
+  display: flex; justify-content: space-between; gap: 20px;
+  font-size: 15px; padding: 6px 0; border-bottom: 1px solid rgba(140, 220, 255, 0.15);
+}
+.debrief-row b { color: #7dff9a; }
+.debrief-total-row {
+  display: flex; justify-content: space-between; font-size: 22px;
+  padding: 12px 0 4px; color: #ffffff;
+}
+.debrief-total-row b { color: #ffb02e; }
+#debrief-buttons, .button-row { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+.big-button {
+  padding: 11px 20px; font-size: 15px; font-weight: 700; cursor: pointer;
+  color: #10202f; background: #ffb02e; border: none; border-radius: 9px;
+}
+.big-button:hover { background: #ffc95e; }
